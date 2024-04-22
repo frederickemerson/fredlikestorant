@@ -26,6 +26,7 @@ export const posts = createTable(
     title: varchar("title", { length: 256 }).notNull(),
     content: text("content").notNull(),
     url: varchar("url", { length: 1024 }).notNull(),
+    slug: varchar("slug",{length: 256}).notNull(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),

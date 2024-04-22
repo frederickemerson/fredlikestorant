@@ -8,7 +8,7 @@ export function TopNav() {
       </div>
   
         <div>
-        <SignedOut>
+        <SignedOut >
             <SignInButton/>
         </SignedOut>
         <SignedIn>
