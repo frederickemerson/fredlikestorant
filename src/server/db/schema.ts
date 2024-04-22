@@ -7,6 +7,7 @@ import {
   pgTableCreator,
   serial,
   timestamp,
+  text,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -19,16 +20,18 @@ import {
 export const createTable = pgTableCreator((name) => `fredlikestorant_${name}`);
 
 export const posts = createTable(
-  "post",
+  "blogpost",
   {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
+    title: varchar("title", { length: 256 }).notNull(),
+    content: text("content").notNull(),
+    url: varchar("url", { length: 1024 }).notNull(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updatedAt"),
   },
   (example) => ({
-    nameIndex: index("name_idx").on(example.name),
+    nameIndex: index("name_idx").on(example.title),
   })
 );
