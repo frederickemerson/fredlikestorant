@@ -16,19 +16,28 @@ export default async function Post({params} : props) {
     })
 
   return (
-        <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row">
-                <div className="md:w-3/4 p-4">
-                    <h1 className="font-bold text-3xl mb-2">{blogpost?.title} </h1>
-                    <p className="text-sm text-gray-600">Published on: {new Date(blogpost?.createdAt).toLocaleDateString()}</p>
-                    <img src={blogpost?.url}/>
-                    <p className="text-lg">
-                        {blogpost?.content}
-                    </p>
-                </div>
-               
-            </div>
-        </div>
+      <div className="px-12 py-8 flex flex-col min-h-screen space-y-12 md:space-y-24 lg:space-y-32">
+        <main className="grid gap-4 md:gap-10 lg:gap-20 xl:gap-16 min-w-[0] flex-1">
+          <div className="grid">
+            <h1 className="text-6xl font-extrabold tracking-tight lg:text-6xl xl:text-7xl">{blogpost?.title}</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Posted on {new Date(blogpost?.createdAt).toLocaleDateString()}</p>
+          </div>
+          <div className="grid gap-4">
+              <img
+                alt="Cover image"
+                className="aspect-video overflow-hidden rounded-lg object-cover"
+                height={140}
+                src={blogpost?.url}
+                width={850}
+              />
+          </div>
+          <div className="grid gap-2">
+            <p>
+              {blogpost?.content}
+            </p>
+          </div>
+        </main>
+      </div>
   )
 }
 
