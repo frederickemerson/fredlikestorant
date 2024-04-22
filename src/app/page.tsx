@@ -25,7 +25,7 @@ export default async function HomePage() {
         <p className="mt-4 text-lg text-gray-500"> Check Out, his latest rants below</p>
       </div>
       
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-4  ">
         {
         posts.map((post,index) => (
           
