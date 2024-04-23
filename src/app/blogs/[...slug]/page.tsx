@@ -1,6 +1,6 @@
-
 import React from 'react'
 import { db } from "~/server/db";
+import { MDXRemote } from 'remote-mdx/rsc'
 
 interface props{
     params:{
@@ -31,9 +31,7 @@ export default async function Post({params} : props) {
                 width={650}
                 align="left"
               />
-            <p>
-              {blogpost?.content}
-            </p>
+            <MDXRemote source={blogpost?.content} />
           </div>
         </div>
         <div className="flex flex-col mt-4">
