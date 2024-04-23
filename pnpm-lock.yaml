@@ -11,6 +11,9 @@ importers:
       '@clerk/nextjs':
         specifier: ^5.0.1
         version: 5.0.1(eslint@8.57.0)(next@14.2.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.4.5)
+      '@clerk/themes':
+        specifier: ^2.0.0
+        version: 2.0.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-icons':
         specifier: ^1.3.0
         version: 1.3.0(react@18.2.0)
@@ -150,6 +153,13 @@ packages:
         optional: true
       react-dom:
         optional: true
+
+  '@clerk/themes@2.0.0':
+    resolution: {integrity: sha512-rMM8HDv2zKuIl/loQjDYNw4iPJQFzwjVcwu+rq7P4bOlRT1Z2kWd6eh7McMO3ZQ67mYgwR77GZF+e00z+stLPg==}
+    engines: {node: '>=18.17.0'}
+    peerDependencies:
+      react: '>=18'
+      react-dom: '>=18'
 
   '@clerk/types@4.0.0':
     resolution: {integrity: sha512-my/uNzHflLYvoLR8RT3LBmYulYGkz+SOVYMdzWt14LpRHajQotnfDSq/GEkfjrBm2HXuZ82GxEDMyYtqHUKv8w==}
@@ -2641,6 +2651,13 @@ snapshots:
     optionalDependencies:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+
+  '@clerk/themes@2.0.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@clerk/types': 4.0.0
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      tslib: 2.4.1
 
   '@clerk/types@4.0.0':
     dependencies:

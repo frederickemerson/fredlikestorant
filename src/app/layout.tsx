@@ -1,5 +1,6 @@
 import "~/styles/globals.css";
 import "@uploadthing/react/styles.css";
+import { dark } from '@clerk/themes';
 
 import { ClerkProvider } from '@clerk/nextjs'
 import { TopNav } from "./_components/TopNav";
@@ -24,7 +25,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+    appearance={{
+      baseTheme: dark
+    }}>
 
     <html lang="en">
       <body className={`font-sans ${inter.variable} flex flex-col gap-4`}>
