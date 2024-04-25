@@ -2,6 +2,9 @@ import Link from "next/link";
 import { db } from "~/server/db";
 export const dynamic = "force-dynamic";
 import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "../components/ui/card"
+import CurrentlyPlaying from "./_components/Spotify";
+import NoSong from "./_components/NoSong";
+import { Suspense } from "react";
 
 export interface BlogPost {
   id: number;
@@ -10,7 +13,6 @@ export interface BlogPost {
   imageUrl: string;
   content: string;
 }
-
 
 export default async function HomePage() {
 
@@ -32,15 +34,19 @@ export default async function HomePage() {
             <Link key={post.slug}  href={"blogs/"+post.slug} >    
                <Card className="bg-gray-900 pt-4   border-0 rounded-xl shadow-2xl dark:bg-gray-1000">
                   <CardContent className=" flex flex-col justify-center items-center rounded-t-xl">
-                   <img className="w-48" src={post.url} />
+                   <img className="w-48 rounded-lg" src={post.url} />
                   <CardTitle className="mt-2 text-white text-md">{post.title}</CardTitle>
                   </CardContent>
                 </Card>
             </Link>
-
-         
         ))
       }
+      </div>
+
+      <div className="mt-4 fixed bottom-4 left-1/2 -translate-x-1/2 z-50  max-w-xs w-auto">
+        <Suspense fallback={<NoSong />} >
+          <CurrentlyPlaying />
+        </Suspense>
       </div>
     </main>
   );

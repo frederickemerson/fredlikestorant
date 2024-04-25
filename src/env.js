@@ -9,6 +9,10 @@ export const env = createEnv({
   server: {
     POSTGRES_URL: z.string().url(),
     MASTER_USER_ID:z.string(),
+    SPOTIFY_CLIENT_ID: z.string(),
+    SPOTIFY_CLIENT_SECRET: z.string(),
+    SPOTIFY_REFRESH_TOKEN: z.string(),
+    SPOTIFY_URL:z.string(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -30,6 +34,10 @@ export const env = createEnv({
   runtimeEnv: {
     POSTGRES_URL: process.env.POSTGRES_URL,
     MASTER_USER_ID: process.env.MASTER_USER_ID,
+    SPOTIFY_CLIENT_ID:process.env.SPOTIFY_CLIENT_ID,
+    SPOTIFY_CLIENT_SECRET:process.env.SPOTIFY_CLIENT_SECRET,
+    SPOTIFY_REFRESH_TOKEN:process.env.SPOTIFY_REFRESH_TOKEN,
+    SPOTIFY_URL:process.env.SPOTIFY_URL,
     NODE_ENV: process.env.NODE_ENV,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
