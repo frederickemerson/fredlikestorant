@@ -5,6 +5,7 @@ import { dark } from '@clerk/themes';
 import { ClerkProvider } from '@clerk/nextjs'
 import { TopNav } from "./_components/TopNav";
 import { Inter } from "next/font/google";
+import { Analytics } from '@vercel/analytics/react';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -35,6 +36,7 @@ export default function RootLayout({
         <TopNav />
         {children}
         </body>
+        <Analytics />
     </html>
 
     </ClerkProvider>
