@@ -5,7 +5,7 @@ import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "../co
 import CurrentlyPlaying from "./_components/Spotify";
 import NoSong from "./_components/NoSong";
 import { Suspense } from "react";
-
+import EmptyCard from "./_components/EmptyCard";
 export interface BlogPost {
   id: number;
   title: string;
@@ -28,16 +28,12 @@ export default async function HomePage() {
       </div>
       
       <div className="flex flex-wrap gap-4  ">
+      <Suspense fallback={ 
+            <EmptyCard />
+          }>
         {
         posts.map((post,index) => (
-          <Suspense fallback={()=>(
-            <div className="bg-gray-900 pt-4 border-0 rounded-xl shadow-2xl dark:bg-gray-1000">
-              <div className="animate-pulse flex flex-col justify-center items-center rounded-t-xl">
-                <div className="w-48 h-48 rounded-lg bg-gray-600"></div> 
-                <div className="mt-2 h-6 w-48 bg-gray-600"></div> 
-              </div>
-            </div>
-          )}>
+         
 
             <Link key={post.slug}  href={"blogs/"+post.slug} >    
                <Card className="bg-gray-900 pt-4   border-0 rounded-xl shadow-2xl dark:bg-gray-1000">
@@ -47,9 +43,10 @@ export default async function HomePage() {
                   </CardContent>
                 </Card>
             </Link>
-          </Suspense>
         ))
       }
+      </Suspense>
+
       </div>
 
       <div className="mt-4 fixed bottom-4 left-1/2 -translate-x-1/2 z-50  max-w-xs w-auto">
