@@ -8,7 +8,7 @@ export default function Comment() {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button  className="right-0.5 rounded-full -translate-x-full" >
+        <Button  className="rounded-full " >
           <span className="sr-only">Open Drawer</span>
           <svg
     className= "w-8 h-8"       
@@ -52,7 +52,7 @@ export default function Comment() {
         </div>
         <div className="grid gap-4">
           <div>
-            <Textarea className="min-h-[100px] text-sm font-medium" id="message" placeholder="Enter your message" />
+            <Textarea className="min-h-[100px] text-sm text-black font-medium" id="message" placeholder="Enter your message" />
           </div>
         </div>
         <div className="border-t pt-4 gap-2 sm:flex sm:justify-end sm:flex-row sm:items-center">
