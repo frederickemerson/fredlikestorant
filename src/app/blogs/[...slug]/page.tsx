@@ -1,6 +1,7 @@
 import React from 'react'
 import { db } from "~/server/db";
 import { MDXRemote } from 'remote-mdx/rsc'
+import Comment from '~/app/_components/Comment';
 
 interface props{
     params:{
@@ -35,8 +36,9 @@ export default async function Post({params} : props) {
           </div>
         </div>
         <div className="flex flex-col mt-4">
-          <div>
+          <div className='flex justify-between'>
           <h1 className="text-3xl font-extrabold tracking-tight lg:text-4xl xl:text-5xl">Comments</h1>
+          <Comment />
           </div>
         </div>
       </div>

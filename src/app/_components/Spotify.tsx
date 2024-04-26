@@ -34,7 +34,7 @@ const Spotify = async () => {
             <span className="text-sm font-medium">{limit(current.item.name)}</span>
           </div>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-4 rounded-md bg-gray-800 text-gray drop-shadow-lg border-black shadow-black  ">
+        <PopoverContent className="w-auto p-4 rounded-lg bg-gray-800 text-gray drop-shadow-lg border-black shadow-black  ">
           <div className="flex items-center justify-between mb-2">
             <h4 className="text-lg font-semibold">Currently Listening</h4>
           </div>
