@@ -9,7 +9,6 @@ interface props{
     }
 }
 
-
 export default async function Post({params} : props) {
 
     const blogpost = await db.query.posts.findFirst({
@@ -38,7 +37,7 @@ export default async function Post({params} : props) {
         <div className="flex flex-col mt-4">
           <div className='flex justify-between'>
           <h1 className="text-3xl font-extrabold tracking-tight lg:text-4xl xl:text-5xl">Comments</h1>
-          <Comments />
+          <Comments blogId={params.slug[0]}/>
           </div>
         </div>
       </div>

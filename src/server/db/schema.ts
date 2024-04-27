@@ -36,3 +36,17 @@ export const posts = createTable(
     nameIndex: index("name_idx").on(example.title),
   })
 );
+
+export const comments = createTable("comments",
+  {
+    c_id: serial("c_id").primaryKey(),
+    name: varchar("name",{length:256}).notNull(),
+    comment:varchar("comment",{length: 2000}).notNull(),
+    linkId: varchar("linkId",{length:512}).notNull(),
+    imageurl:varchar("imageurl",{length:255}).notNull(),
+    createdAt: timestamp("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+    updatedAt: timestamp("updatedAt"),
+  },
+)

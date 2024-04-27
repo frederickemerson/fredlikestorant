@@ -1,10 +1,19 @@
 
 import { Button } from "~/components/ui/button"
-import { DrawerTrigger, DrawerTitle, DrawerDescription, DrawerHeader, DrawerFooter, DrawerContent, Drawer } from "~/components/ui/drawer"
-import { Textarea } from "~/components/ui/textarea"
+import { DrawerTrigger, DrawerContent, Drawer } from "~/components/ui/drawer"
 import PostComment from './PostComment'
+import { db } from "~/server/db";
+import { AvatarImage, AvatarFallback, Avatar } from "~/components/ui/avatar"
 
-export default function Comments() {
+export default async function Comments({blogId}) {
+
+  
+
+  const comments = await db.query.comments.findMany({
+    where: (model, {eq})=>eq(model.linkId,blogId),
+    orderBy: (model, {desc}) => desc(model.c_id)
+  });
+
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -34,8 +43,29 @@ export default function Comments() {
             <PostComment />
           </div>
         </div>
-        <div className="grid gap-4">
-        </div>
+        <div className="grid gap-4 text-black">
+{          comments.map((comment,index)=>(
+
+  <div key={comment.c_id} className="flex items-start gap-4">
+    <Avatar className="h-10 w-10 shrink-0 border">
+              <AvatarImage  src={comment.imageurl} />
+              <AvatarFallback>{comment.name[0]}</AvatarFallback>
+            </Avatar>
+    <div className="space-y-2">
+      <div className="flex flex-col items-start justify-between">
+        <div className="font-medium"> {comment.name}</div>
+      <p className="text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+      {comment.comment}
+      </p>
+      </div>
+
+    </div>
+  </div>
+
+))
+}       
+
+ </div>
       </DrawerContent>
     </Drawer>
   )
