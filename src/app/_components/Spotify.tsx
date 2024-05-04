@@ -14,8 +14,7 @@ const limit:string =  (str: string) => {
 }
 
 const Spotify = async () => {
-    const apiUrl = env.SPOTIFY_URL
-    const response = await fetch(`${apiUrl}/api/spotify`);
+    const response = await fetch(`${env.SPOTIFY_URL}/api/spotify`);
     if (response.ok && response.headers.get('Content-Type')?.includes('application/json')) {
       const current:SpotifyAPIResponse = await response.json() ;
       return(

@@ -1,20 +1,60 @@
-
+"use client"
 import { Button } from "~/components/ui/button"
-import { DrawerTrigger, DrawerDescription, DrawerContent, Drawer } from "~/components/ui/drawer"
+import { DrawerTrigger, DrawerClose, DrawerDescription, DrawerContent, Drawer } from "~/components/ui/drawer"
 import { Textarea } from "~/components/ui/textarea"
 import { SignedIn, SignedOut } from "@clerk/nextjs"
+import { useState } from "react"
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
 
-export default function PostComment() {
+interface RequestData{
+  comment:string,
+  linkId:string,
+}
+
+export default function PostComment({blogId}) {
+
+  const [userComment, setUserComment] = useState<string>("")
+  const [showAlert, setShowAlert] = useState<boolean>(false)
+  const [alertMessage, setAlertMessage] = useState<string>("")
+
+  const handleSubmit = async() => {
+    setShowAlert(false);
+    const formData:RequestData = { comment:userComment, linkId:blogId  };
+    const response = await fetch('http://localhost:3000/api/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    });
+
+    if (response.ok) {
+      const result = await response.text();
+      console.log('Server response:', result);
+      setAlertMessage("Data submitted successfully!");
+      setShowAlert(true);
+    } else {
+      console.error('Failed to submit form');
+      setAlertMessage("Failed to submit form.");
+      setShowAlert(true);
+    }
+  }
 
   return (
     <Drawer>
       <DrawerTrigger asChild>
         <Button  className="rounded-full bg-white hover:bg-gray-100 " >
           <span className="sr-only">Open Drawer</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M6 12h12M12 18V6" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M6 12h12M12 18V6" stroke="#000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"></path></svg>
         </Button>
       </DrawerTrigger>
       <DrawerContent className="w-screen max-h-1/2 p-4">
+      {showAlert && (
+          <Alert>
+            <AlertTitle>Server Response</AlertTitle>
+            <AlertDescription>{alertMessage}</AlertDescription>
+          </Alert>
+        )}
         <SignedIn>
         <div className="grid gap-4">
           <div className="flex items-left justify-between mb-4">
@@ -41,17 +81,15 @@ export default function PostComment() {
         </div>
         <div className="grid gap-4">
           <div>
-            <Textarea className="min-h-[100px] text-sm text-black font-medium" id="message" placeholder="Enter your message" />
+            <Textarea onChangeCapture={e => setUserComment(e.currentTarget.value)} className="min-h-[100px] text-sm text-black font-medium" id="message" placeholder="Enter your message" />
           </div>
         </div>
         <div className="border-t pt-4 gap-2 sm:flex sm:justify-end sm:flex-row sm:items-center">
-        <Button
-            className="bg-gray-950 text-gray-50 border-gray-800 hover:bg-gray-800 hover:text-gray-50 w-full sm:w-1/2"
-            variant="outline"
-          >
-            Cancel
+        <DrawerClose className="w-full sm:w-1/2"> 
+       <Button className="bg-gray-950 text-gray-50 border-gray-800 hover:bg-gray-800 hover:text-gray-50 w-full" variant="outline"> Cancel
           </Button>
-          <Button className="bg-gray-50 text-gray-950 hover:bg-gray-200 hover:text-gray-950 w-full sm:w-1/2">Submit</Button>
+          </DrawerClose>
+          <Button onClick={handleSubmit} className="bg-gray-50 text-gray-950 hover:bg-gray-200 hover:text-gray-950 w-full sm:w-1/2">Submit</Button>
         </div> 
         </SignedIn>
         <SignedOut>

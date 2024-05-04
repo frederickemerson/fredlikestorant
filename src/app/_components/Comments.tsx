@@ -7,8 +7,6 @@ import { AvatarImage, AvatarFallback, Avatar } from "~/components/ui/avatar"
 
 export default async function Comments({blogId}) {
 
-  
-
   const comments = await db.query.comments.findMany({
     where: (model, {eq})=>eq(model.linkId,blogId),
     orderBy: (model, {desc}) => desc(model.c_id)
@@ -36,11 +34,11 @@ export default async function Comments({blogId}) {
     </svg>
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="w-screen p-4">
+      <DrawerContent className="w-screen p-4 ">
         <div className="grid gap-4">
           <div className="flex items-left justify-between mb-4">
               <div className="text-gray-800 font-semibold text-3xl">Comments</div>
-            <PostComment />
+            <PostComment blogId={blogId} />
           </div>
         </div>
         <div className="grid gap-4 text-black">
