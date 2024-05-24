@@ -1,6 +1,4 @@
 import React from 'react'
-import Comments from '~/app/_components/Comments';
-
 
 export default async function BabyReindeer() {
 
