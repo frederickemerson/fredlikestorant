@@ -3,7 +3,7 @@ import { Button } from "~/components/ui/button"
 import { DrawerTrigger, DrawerClose, DrawerDescription, DrawerContent, Drawer } from "~/components/ui/drawer"
 import { Textarea } from "~/components/ui/textarea"
 import { SignedIn, SignedOut } from "@clerk/nextjs"
-import { useState } from "react"
+import React, { useState } from "react"
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert"
 
 interface RequestData{
@@ -20,13 +20,13 @@ export default function PostComment({blogId}) {
   const handleSubmit = async() => {
     setShowAlert(false);
     const formData:RequestData = { comment:userComment, linkId:blogId  };
-    const response = await fetch('http://localhost:3000/api/submit', {
+    const response = React.cache(await fetch('http://localhost:3000/api/submit', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(formData)
-    });
+    }));
 
     if (response.ok) {
       const result = await response.text();
