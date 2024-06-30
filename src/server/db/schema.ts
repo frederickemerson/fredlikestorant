@@ -24,7 +24,7 @@ export const posts = createTable(
   {
     id: serial("id").primaryKey(),
     title: varchar("title", { length: 256 }).notNull(),
-    content: text("content").notNull(),
+    contenturl: varchar("contenturl", { length: 255 }).notNull(),
     url: varchar("url", { length: 1024 }).notNull(),
     slug: varchar("slug",{length: 256}).notNull(),
     createdAt: timestamp("created_at")
@@ -43,7 +43,7 @@ export const comments = createTable("comments",
     name: varchar("name",{length:256}).notNull(),
     comment:varchar("comment",{length: 2000}).notNull(),
     linkId: varchar("linkId",{length:512}).notNull(),
-    imageurl:varchar("imageurl",{length:255}).notNull(),
+    imageurl:varchar("imageurl",{length:255}),
     createdAt: timestamp("created_at")
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

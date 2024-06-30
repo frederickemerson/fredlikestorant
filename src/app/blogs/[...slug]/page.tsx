@@ -15,6 +15,8 @@ export default async function Post({params} : props) {
         where: (model, {eq})=>eq(model.slug,params.slug[0])
     })
 
+    const content = await fetch(blogpost?.contenturl).then(res => res.text())
+
   return (
       <div className="flex flex-col items-center w-full h-screen px-12 py-6 ">
         <div className="flex flex-col pb-4 w-9/10 lg:w-1/2">
@@ -30,7 +32,9 @@ export default async function Post({params} : props) {
                 src={blogpost?.url}
                 width={650}
               />
-            <MDXRemote source={blogpost?.content} />
+              <div className='text-md tracking-wide '>
+              <MDXRemote source={content} />
+            </div>
           </div>
         </div>
         <div className="mt-4 float-right md:fixed bottom-4 md:right-1 md:-translate-x-1/2 z-50  max-w-xs w-auto">
