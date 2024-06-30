@@ -38,7 +38,7 @@ export default async function HomePage() {
             <Link key={post.slug}  href={"blogs/"+post.slug} >    
                <Card className="bg-gray-900 pt-4   border-0 rounded-xl shadow-2xl dark:bg-gray-1000">
                   <CardContent className=" flex flex-col justify-center items-center rounded-t-xl">
-                   <img className="w-48 rounded-lg" src={post.url} />
+                   <img className="w-48 h-48 rounded-lg" src={post.url} />
                   <CardTitle className="mt-2 text-white text-md">{post.title}</CardTitle>
                   </CardContent>
                 </Card>
