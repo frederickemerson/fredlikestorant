@@ -23,8 +23,8 @@ export default async function HomePage() {
 
   return (
     <main className="px-8 py-4">
-      <div className="mb-12 ">
-        <h1 className="text-6xl font-extrabold tracking-tight"> Fred Really Loves to Yap, Doesn't He?</h1>
+      <div className="text-center md:text-left mb-12 ">
+        <h1 className=" text-6xl font-extrabold tracking-tight"> Fred Really Loves to Yap, Doesn't He?</h1>
         <p className="mt-4 text-lg text-gray-500"> Check Out, his latest rants below</p>
       </div>
       
@@ -36,7 +36,7 @@ export default async function HomePage() {
         posts.map((post,index) => (
         
             <Link key={post.slug}  href={"blogs/"+post.slug} >    
-               <Card className="bg-gray-900 pt-4   border-0 rounded-xl shadow-2xl dark:bg-gray-1000">
+               <Card className="bg-gray-900 pt-4 h-64 w-96 md:w-auto border-0 rounded-xl shadow-2xl dark:bg-gray-1000">
                   <CardContent className=" flex flex-col justify-center items-center rounded-t-xl">
                    <img className="w-48 h-48 rounded-lg" src={post.url} />
                   <CardTitle className="mt-2 text-white text-md">{post.title}</CardTitle>
