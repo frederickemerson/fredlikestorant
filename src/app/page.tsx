@@ -46,7 +46,7 @@ export default function HomePage() {
     <main ref={container} className="px-8 py-4 relative h-[calc(200vh+300px)]">
 
       <ShiftDown scrollYProgress={scrollYProgress} isMobile={IsMobile}>
-        <h1 className=" text-6xl font-extrabold tracking-tight"> Fred Really Loves to Yap, Doesn't He?</h1>
+        <h1 className="text-4xl lg:text-6xl font-extrabold tracking-tight"> Fred Really Loves to Yap, Doesn't He?</h1>
         <p className="mt-8 text-lg text-gray-500"> Check Out, his latest rants below</p>
       </ShiftDown>
 

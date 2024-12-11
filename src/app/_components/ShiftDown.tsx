@@ -112,7 +112,7 @@ const ShiftDown = ({children, scrollYProgress, isMobile}) => {
     style={{scale, rotate, opacity}}
     className="sticky top-0 h-screen text-[3.5vw] flex flex-col justify-center items-center pb-[30vh] "
   >
-        <div  ref={plane1} style={{opacity:stop}} className="absolute sm:opacity-0 md:opacity-0 lg:opacity-100 inset-0 filter brightness-75">
+        <div  ref={plane1} className="absolute opacity-0 lg:opacity-100 inset-0 filter brightness-75">
         <Image 
           src={floating1} 
           alt="Floating Image 1" 
@@ -136,7 +136,7 @@ const ShiftDown = ({children, scrollYProgress, isMobile}) => {
         ></div>
       </div>
 
-      <div ref={plane2} style={{opacity:stop}} className="absolute inset-0 filter brightness-60">
+      <div ref={plane2} className="absolute opacity-0 lg:opacity-100 inset-0 filter brightness-60">
         <Image 
           src={floating4} 
           alt="Floating Image 4" 
@@ -167,7 +167,7 @@ const ShiftDown = ({children, scrollYProgress, isMobile}) => {
         ></div>
       </div>
 
-      <div  ref={plane3} style={{opacity:stop}} className="absolute inset-0 filter brightness-50">
+      <div  ref={plane3} className="absolute opacity-0 lg:opacity-100 inset-0 filter brightness-50">
         <Image 
           src={floating3} 
           alt="Floating Image 7" 
