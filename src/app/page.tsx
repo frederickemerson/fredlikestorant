@@ -1,59 +1,57 @@
-import Link from "next/link";
-import { db } from "~/server/db";
+'use client'
+
 export const dynamic = "force-dynamic";
-import { CardTitle, CardContent, Card } from "../components/ui/card"
-import CurrentlyPlaying from "./_components/Spotify";
-import NoSong from "./_components/NoSong";
-import { Suspense } from "react";
-import EmptyCard from "./_components/EmptyCard";
- 
+
+import { useEffect, useRef } from "react";
+import { useScroll, useTransform, motion } from "framer-motion";
+import Image from 'next/image';
+import ShiftDown from "./_components/ShiftDown";
+import Lenis from 'lenis';
+import ThoughtsAndRants from "./_components/ThoughtsAndRants";
+import gsap from 'gsap';
+import { IsMobile } from "./_components/isMobile";
+
 export interface BlogPost {
   id: number;
+  createdAt: Date;
   title: string;
   slug: string;
   imageUrl: string;
   content: string;
 }
 
-export default async function HomePage() {
+export default function HomePage() {
 
-  const posts = await db.query.posts.findMany({
-    orderBy: (model, {desc}) => desc(model.id)
-  });
+  const container = useRef();
+  
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ["start start", "end end"]
+  }) 
+
+
+  useEffect( () => {
+    const lenis = new Lenis()
+
+    function raf(time) {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
+    }
+
+    requestAnimationFrame(raf)
+  }, [])
+
 
   return (
-    <main className="px-8 py-4">
-      <div className="text-center md:text-left mb-12 ">
+    <main ref={container} className="px-8 py-4 relative h-[calc(200vh+300px)]">
+
+      <ShiftDown scrollYProgress={scrollYProgress} isMobile={IsMobile}>
         <h1 className=" text-6xl font-extrabold tracking-tight"> Fred Really Loves to Yap, Doesn't He?</h1>
-        <p className="mt-4 text-lg text-gray-500"> Check Out, his latest rants below</p>
-      </div>
-      
-      <div className="flex flex-wrap gap-4  ">
-      <Suspense fallback={ 
-            <EmptyCard />
-          }>
-        {
-        posts.map((post,index) => (
-        
-            <Link key={post.slug}  href={"blogs/"+post.slug} >    
-               <Card className="bg-gray-900 pt-4 h-64 w-96 md:w-auto border-0 rounded-xl shadow-2xl dark:bg-gray-1000">
-                  <CardContent className=" flex flex-col justify-center items-center rounded-t-xl">
-                   <img className="w-48 h-48 rounded-lg" src={post.url} />
-                  <CardTitle className="mt-2 text-white text-md">{post.title}</CardTitle>
-                  </CardContent>
-                </Card>
-            </Link>
-        ))
-      }
-      </Suspense>
+        <p className="mt-8 text-lg text-gray-500"> Check Out, his latest rants below</p>
+      </ShiftDown>
 
-      </div>
+      <ThoughtsAndRants scrollYProgress={scrollYProgress} />
 
-      <div className="mt-4 fixed bottom-4 left-1/2 -translate-x-1/2 z-50  max-w-xs w-auto">
-        <Suspense fallback={<NoSong />} >
-          <CurrentlyPlaying  />
-        </Suspense>
-      </div>
     </main>
   );
 }

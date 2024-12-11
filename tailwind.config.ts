@@ -21,6 +21,10 @@ const config = {
       center: true,
       padding: "2rem",
       screens: {
+        'sm': '640px',  
+        'md': '768px',  
+        'lg': '1024px',
+        'xl': '1280px',
         "2xl": "1400px",
       },
     },
@@ -74,10 +78,15 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+          "float": {
+            '0%, 100%': { transform: 'translateY(0)' },
+            '50%': { transform: 'translateY(-10px)' },
+          },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "float": "float 5s ease-in-out infinite",
       },
     },
   },

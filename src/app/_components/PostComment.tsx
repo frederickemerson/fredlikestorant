@@ -28,13 +28,15 @@ export default function PostComment({blogId}) {
       body: JSON.stringify(formData)
     }));
 
+    console.log(response)
+
     if (response.ok) {
       const result = await response.text();
       console.log('Server response:', result);
       setAlertMessage("Data submitted successfully!");
       setShowAlert(true);
     } else {
-      console.error('Failed to submit form');
+      console.error('Failed to submit form', response);
       setAlertMessage("Failed to submit form.");
       setShowAlert(true);
     }

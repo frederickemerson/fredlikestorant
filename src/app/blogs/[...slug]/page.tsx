@@ -2,6 +2,7 @@ import React from 'react'
 import { db } from "~/server/db";
 import { MDXRemote } from 'remote-mdx/rsc'
 import Comments from '~/app/_components/Comments';
+import Curve from '~/app/_components/Curve';
 
 interface props{
     params:{
@@ -18,7 +19,8 @@ export default async function Post({params} : props) {
     const content = await fetch(blogpost?.contenturl).then(res => res.text())
 
   return (
-      <div className="flex flex-col items-center w-full h-screen px-12 py-6 ">
+    <Curve backgroundColor={"#000000"} routeName={blogpost?.title}>
+      <div className="flex flex-col items-center w-full h-100 px-12 py-6  bg-[#02182c]">
         <div className="flex flex-col pb-4 w-9/10 lg:w-1/2">
           <div className="flex flex-col mb-12">
             <h1 className="text-5xl font-extrabold tracking-tight md:text-6xl xl:text-7xl">{blogpost?.title}</h1>
@@ -41,7 +43,8 @@ export default async function Post({params} : props) {
           <Comments blogId={params.slug[0]}/>
         </div>
       </div>
-  )
+  </Curve>
+    )
 }
 
 

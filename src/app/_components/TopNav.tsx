@@ -9,7 +9,7 @@ export function TopNav() {
         <div>
           Fred Loves To Rant
         </div>
-      </Link>
+      </Link> 
   
         <div>
         <SignedOut >

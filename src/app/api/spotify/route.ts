@@ -42,10 +42,27 @@ export const GET = async (req: NextRequest) => {
       headers: { 'Authorization': `Bearer ${access_token}` },
     });
 
-    return new NextResponse(JSON.stringify(await result.json()), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    return new NextResponse(JSON.stringify(await result.json()), { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': `${env.SPOTIFY_URL}`, 
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Credentials': 'true',
+      } });
 
   } catch (error) {
+    
     console.error('Error fetching Spotify data:', error);
-    return new NextResponse(JSON.stringify({ error: 'Internal Server Error' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    return new NextResponse(JSON.stringify({ error: 'Internal Server Error' }), { status: 500, headers: { 'Content-Type': 'application/json',  'Access-Control-Allow-Origin': `${env.SPOTIFY_URL}`, 'Access-Control-Allow-Credentials': 'true', } });
   }
+};
+
+export const OPTIONS = async () => {
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': env.SPOTIFY_URL, // Allow your frontend URL
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Allow-Credentials': 'true', // Allow credentials like cookies
+    },
+  });
 };
