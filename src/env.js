@@ -14,6 +14,7 @@ export const env = createEnv({
     SPOTIFY_REFRESH_TOKEN: z.string(),
     SPOTIFY_URL:z.string(),
     TABLE_PRE:z.string(),
+    STORAGE_ACCESS:z.string(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -43,6 +44,7 @@ export const env = createEnv({
     TABLE_PRE:process.env.TABLE_PRE,
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
+    STORAGE_ACCESS: process.env.STORAGE_ACCESS
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

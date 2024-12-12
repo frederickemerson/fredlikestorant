@@ -1,5 +1,8 @@
 import React from 'react'
 
+import { env } from '~/env'
+
+
 export default async function BabyReindeer() {
 
 
@@ -15,7 +18,7 @@ export default async function BabyReindeer() {
                 alt="Cover image"
                 className="aspect-video overflow-hidden rounded-lg object-cover mb-4 lg:mr-2"
                 height={140}
-                src='https://utfs.io/f/6867b5af-68d1-42d7-b46f-06cc9f33029a-2fk.jpg'
+                src={env.STORAGE_ACCESS+"br.jpg"}
                 width={650}
               />
           You know, when I first started watching Baby Reindeer, I thought it was just going to be another show about some creepy stalker terrorizing a guy. But man, was I wrong. This series goes way deeper than that. It's like peeling back layers of an onion, each episode revealing a new facet of the human experience. As the series unfolds, we see Donny's internal struggle laid bare. It's like he's wrestling with these demons inside him, trying to find some kind of meaning or purpose in all the chaos. And Martha, she's like this dark mirror reflecting back all his fears and insecurities.<br/><br/>

@@ -19,7 +19,7 @@ export default async function Post({params} : props) {
     const content = await fetch(blogpost?.contenturl).then(res => res.text())
 
   return (
-    <Curve backgroundColor={"#000000"} routeName={blogpost?.title}>
+    <Curve routeName={blogpost?.title}>
       <div className="flex flex-col items-center w-full h-100 px-12 py-6  bg-[#02182c]">
         <div className="flex flex-col pb-4 w-9/10 lg:w-1/2">
           <div className="flex flex-col mb-12">
