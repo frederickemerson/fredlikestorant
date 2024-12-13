@@ -10,7 +10,7 @@ const ThoughtsAndRants = ({scrollYProgress}) => {
     const opacity = useTransform(scrollYProgress,[0, 1], [0, 1])
   
   return (
-    <motion.div style={{scale, rotate, opacity}} className="relative h-auto">
+    <motion.div style={{opacity}} className="relative h-auto">
       <Thoughts /> 
       <BlogPosts />    
     </motion.div>

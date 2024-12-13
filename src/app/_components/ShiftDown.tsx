@@ -17,7 +17,7 @@ const ShiftDown = ({children, scrollYProgress}) => {
 
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
   const rotate = useTransform(scrollYProgress, [0, 1], [0, -5]);
-  const opacity = useTransform(scrollYProgress,[0, 0.7], [1, 0])
+  const opacity = useTransform(scrollYProgress,[0, 0.5], [1, 0])
   const [stop,setStop] = useState(0);
   const [screenHeight, setScreenHeight] = useState(0);
   const [scrollCount, setScrollCount] = useState(0);
@@ -79,18 +79,6 @@ const ShiftDown = ({children, scrollYProgress}) => {
     } 
     },[window.innerWidth,requestAnimationFrameId]);
 
-  const handleClick = () => {
-    const targetPosition = (scrollCount + 1.1) * screenHeight;
-
-    window.scrollTo({
-      top: targetPosition,
-      behavior: 'smooth', // Smooth scroll effect
-    });
-
-    setScrollCount(scrollCount + 1); // Increment the scroll count     <button onClick={handleClick}>Move Page Down</button>
-
-  };
-
   const manageMouseMove = (e: React.MouseEvent) => {
     if(window.innerWidth>990){
       const { movementX, movementY } = e;
@@ -109,7 +97,7 @@ const ShiftDown = ({children, scrollYProgress}) => {
   return (
     <motion.div
     onMouseMove={e => (manageMouseMove(e))}
-    style={{scale, rotate, opacity}}
+    style={{opacity}}
     className="sticky top-0 h-screen text-[3.5vw] flex flex-col justify-center items-center pb-[30vh] "
   >
         <div  ref={plane1} className="absolute opacity-0 lg:opacity-100 inset-0 filter brightness-75">
