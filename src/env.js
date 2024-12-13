@@ -15,6 +15,8 @@ export const env = createEnv({
     SPOTIFY_URL:z.string(),
     TABLE_PRE:z.string(),
     STORAGE_ACCESS:z.string(),
+    TELEGRAM_BOT_TOKEN:z.string(),
+    TELEGRAM_CHAT_ID:z.string(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -44,7 +46,9 @@ export const env = createEnv({
     TABLE_PRE:process.env.TABLE_PRE,
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
-    STORAGE_ACCESS: process.env.STORAGE_ACCESS
+    STORAGE_ACCESS: process.env.STORAGE_ACCESS,
+    TELEGRAM_BOT_TOKEN:process.env.TELEGRAM_BOT_TOKEN,
+    TELEGRAM_CHAT_ID:process.env.TELEGRAM_CHAT_ID,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   },
   /**

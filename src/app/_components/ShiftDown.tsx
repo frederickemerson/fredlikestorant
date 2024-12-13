@@ -13,7 +13,7 @@ import floating6 from 'public/img6.svg';
 import floating7 from 'public/img7.svg';
 import floating8 from 'public/img8.svg';
 
-const ShiftDown = ({children, scrollYProgress, isMobile}) => {
+const ShiftDown = ({children, scrollYProgress}) => {
 
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
   const rotate = useTransform(scrollYProgress, [0, 1], [0, -5]);

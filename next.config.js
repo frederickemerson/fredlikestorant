@@ -22,7 +22,7 @@ const config = {
         remotePatterns: [
         {
             protocol: 'https',
-            hostname: 'utfs.io',
+            hostname: 'breadstore.blob.core.windows.net',
           },
         ],   
     }
