@@ -19,7 +19,6 @@ interface TelegramChatMessage {
     result: TelegramChatMessage[];
     description?: string;
   }
-  
 
 export const GET = async (req: NextRequest) => {
     const telegramApiUrl = `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/getChat`;
@@ -28,9 +27,10 @@ export const GET = async (req: NextRequest) => {
       // Fetch the last message from the specified chat_id
       const response = await fetch(telegramApiUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json'},
         body: JSON.stringify({
-          chat_id: parseInt(env.TELEGRAM_CHAT_ID), // Ensure TELEGRAM_CHAT_ID is a valid number
+          chat_id: parseInt(env.TELEGRAM_CHAT_ID),
+          no_cache: Date.now(), // Ensure TELEGRAM_CHAT_ID is a valid number
           limit: 1, // Fetch only the last message
         }),
       });
