@@ -41,7 +41,7 @@ export const GET = async (req: NextRequest) => {
           status: 400,
         });
       }
-        console.log(data)
+
       // Get the last message
       const lastMessage = data.result ? data.result.pinned_message.text : null;
   
