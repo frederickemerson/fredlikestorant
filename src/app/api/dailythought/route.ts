@@ -31,7 +31,6 @@ export const GET = async (req: NextRequest) => {
         body: JSON.stringify({
           chat_id: parseInt(env.TELEGRAM_CHAT_ID),
           no_cache: Date.now(), // Ensure TELEGRAM_CHAT_ID is a valid number
-          limit: 1, // Fetch only the last message
         }),
       });
   
@@ -42,7 +41,7 @@ export const GET = async (req: NextRequest) => {
           status: 400,
         });
       }
-        
+        console.log(data)
       // Get the last message
       const lastMessage = data.result ? data.result.pinned_message.text : null;
   
