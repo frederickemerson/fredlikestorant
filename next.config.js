@@ -22,7 +22,7 @@ const config = {
         remotePatterns: [
         {
             protocol: 'https',
-            hostname: 'breadstore.blob.core.windows.net',
+            hostname: 'eeaijeuvjuhxcftixigx.supabase.co',
           },
         ],   
     }

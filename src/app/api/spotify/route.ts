@@ -2,14 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { env } from "~/env";
 import { cookies } from 'next/headers';
 
-const getAccessToken = async (client_id, client_secret, cookieStore) => {
-  let refresh_token = cookieStore.get('refresh_token');
+const getAccessToken = async (client_id: string, client_secret: string) => {
+  const refresh_token = env.SPOTIFY_REFRESH_TOKEN;
   
-  if (!refresh_token) {
-    refresh_token = env.SPOTIFY_REFRESH_TOKEN;
-    cookieStore.set('refresh_token', refresh_token, { secure: true, httpOnly: true });
-  }
-
   const response = await fetch(`https://accounts.spotify.com/api/token`, {
     method: 'POST',
     headers: {
@@ -22,36 +17,67 @@ const getAccessToken = async (client_id, client_secret, cookieStore) => {
     }),
   });
 
-  return response.json();
+  if (!response.ok) {
+    throw new Error(`Failed to get access token: ${response.status}`);
+  }
+
+  const data = await response.json();
+  
+  if (!data.access_token) {
+    throw new Error('No access token received');
+  }
+
+  return data.access_token;
 };
 
 export const GET = async (req: NextRequest) => {
   const client_id = env.SPOTIFY_CLIENT_ID;
   const client_secret = env.SPOTIFY_CLIENT_SECRET;
-  const cookieStore = cookies(req.headers); 
 
   try {
-    const { access_token, refresh_token } = await getAccessToken(client_id, client_secret, cookieStore);
+    // Get new access token
+    const access_token = await getAccessToken(client_id, client_secret);
 
-    if (refresh_token) {
-      cookieStore.set('refresh_token', refresh_token, { secure: true, httpOnly: true });
-    }
-
+    // Get currently playing
     const result = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
       method: "GET",
       headers: { 'Authorization': `Bearer ${access_token}` },
     });
 
-    return new NextResponse(JSON.stringify(await result.json()), { status: 200, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': `${env.SPOTIFY_URL}`, 
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 
+    // Handle different response scenarios
+    if (result.status === 204) {
+      return NextResponse.json({ is_playing: false });
+    }
+
+    if (!result.ok) {
+      throw new Error(`Spotify API error: ${result.status}`);
+    }
+
+    const data = await result.json();
+
+    return NextResponse.json(data, { 
+      headers: { 
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': env.SPOTIFY_URL,
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         'Access-Control-Allow-Credentials': 'true',
-      } });
+      }
+    });
 
   } catch (error) {
-    
     console.error('Error fetching Spotify data:', error);
-    return new NextResponse(JSON.stringify({ error: 'Internal Server Error' }), { status: 500, headers: { 'Content-Type': 'application/json',  'Access-Control-Allow-Origin': `${env.SPOTIFY_URL}`, 'Access-Control-Allow-Credentials': 'true', } });
+    return NextResponse.json(
+      { error: 'Internal Server Error', details: error.message },
+      { 
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': env.SPOTIFY_URL,
+          'Access-Control-Allow-Credentials': 'true',
+        }
+      }
+    );
   }
 };
 
@@ -59,10 +85,10 @@ export const OPTIONS = async () => {
   return new NextResponse(null, {
     status: 204,
     headers: {
-      'Access-Control-Allow-Origin': env.SPOTIFY_URL, // Allow your frontend URL
+      'Access-Control-Allow-Origin': env.SPOTIFY_URL,
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      'Access-Control-Allow-Credentials': 'true', // Allow credentials like cookies
+      'Access-Control-Allow-Credentials': 'true',
     },
   });
 };

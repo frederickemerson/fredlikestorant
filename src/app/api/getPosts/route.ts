@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '~/server/db';
-
+import { env } from '~/env';
 interface Post {
   id: number;
   title: string;
   slug: string;
-  imageUrl: string;
-  content: string;
+  url: string;
+  contenturl: string;
   createdAt: string,
   updatedAt: string,
 }
@@ -21,6 +21,12 @@ export const GET = async (req: NextRequest) => {
         orderBy: (model, {desc}) => desc(model.id)
       });
   
+      if(posts){
+        posts.map((post)=>{
+          post.url=env.STORAGE_ACCESS+post.url
+          post.contenturl=env.STORAGE_ACCESS+post.contenturl
+        })
+      }
       return new NextResponse(JSON.stringify(posts), { status: 200 });
     } catch (error) {
       console.error('Error fetching posts:', error);
