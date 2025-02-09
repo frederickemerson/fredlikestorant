@@ -3,7 +3,7 @@ import { db } from "~/server/db";
 import { MDXRemote } from 'remote-mdx/rsc'
 import Comments from '~/app/_components/Comments';
 import Curve from '~/app/_components/Curve';
-
+import { env } from '~/env';
 interface props{
     params:{
         slug:string[],
@@ -16,7 +16,7 @@ export default async function Post({params} : props) {
         where: (model, {eq})=>eq(model.slug,params.slug[0])
     })
 
-    const content = await fetch(blogpost?.contenturl).then(res => res.text())
+    const content = await fetch(env.STORAGE_ACCESS+blogpost?.contenturl).then(res => res.text())
 
   return (
     <Curve routeName={blogpost?.title}>
@@ -31,7 +31,7 @@ export default async function Post({params} : props) {
                 alt="Cover image"
                 className="aspect-video overflow-hidden rounded-lg object-cover mb-4 lg:mr-2"
                 height={140}
-                src={blogpost?.url}
+                src={env.STORAGE_ACCESS+blogpost?.url}
                 width={650}
               />
               <div className='text-md tracking-wide '>
