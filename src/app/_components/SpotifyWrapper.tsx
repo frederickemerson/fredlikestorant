@@ -5,13 +5,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover
 import NoSong from './NoSong';
 import type { SpotifyAPIResponse } from '~/lib/types';
 
-declare global {
-    interface Window {
-        onSpotifyWebPlaybackSDKReady: () => void;
-        Spotify: any;
-    }
-}
-
 const limit = (str: string) => {
     if (!str) return '';
     if (str.length > 15) {
@@ -26,67 +19,58 @@ const firstp = (str: string) => {
     return index === -1 ? str : str.substring(0, index);
 };
 
-const getAccessToken = async () => {
-    try {
-        const response = await fetch('/api/spotify-token');
-        if (!response.ok) throw new Error('Failed to get token');
-        const data = await response.json();
-        return data.access_token;
-    } catch (error) {
-        console.error('Error getting access token:', error);
-        throw error;
-    }
-};
-
 export const SpotifyWrapper = () => {
     const [currentSong, setCurrentSong] = useState<SpotifyAPIResponse | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [sdkReady, setSdkReady] = useState(false);
-    const playerRef = useRef<any>(null);
-    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const currentSongRef = useRef<SpotifyAPIResponse | null>(null);
-    const accessTokenRef = useRef<string | null>(null);
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Function to fetch current song using REST API
+    const calculateNextPollTime = (currentTrack: SpotifyAPIResponse | null) => {
+        if (!currentTrack || !currentTrack.item) return 5000; // Default polling interval
+        
+        const progressMs = currentTrack.progress_ms || 0;
+        const durationMs = currentTrack.item.duration_ms;
+        const timeRemaining = durationMs - progressMs;
+        
+        // Add a small buffer to ensure we don't miss the track change
+        return Math.min(timeRemaining + 1000, 5000);
+    };
+
     const fetchCurrentSong = useCallback(async () => {
         try {
-            // Get a fresh token if we don't have one
-            if (!accessTokenRef.current) {
-                accessTokenRef.current = await getAccessToken();
-            }
-
             const response = await fetch('/api/spotify', {
-                headers: {
-                    'Authorization': `Bearer ${accessTokenRef.current}`
-                },
                 cache: 'no-store'
             });
             
-            if (response.status === 401) {
-                // Token expired, get a new one and retry
-                accessTokenRef.current = await getAccessToken();
-                const retryResponse = await fetch('/api/spotify', {
-                    headers: {
-                        'Authorization': `Bearer ${accessTokenRef.current}`
-                    },
-                    cache: 'no-store'
-                });
-                if (!retryResponse.ok) throw new Error('Failed after token refresh');
-                return await retryResponse.json();
-            }
+            if (response.ok && response.headers.get('Content-Type')?.includes('application/json')) {
+                const data = await response.json();
 
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            const data = await response.json();
+                // If not playing, clear current song
+                if (data && data.is_playing === false) {
+                    setCurrentSong(null);
+                    currentSongRef.current = null;
+                    return;
+                }
 
-            if (data && data.is_playing === false) {
+                // Check if we have a valid song and if it's different from the current one
+                if (data?.item?.id) {
+                    const isNewSong = !currentSongRef.current || currentSongRef.current.item.id !== data.item.id;
+                    if (isNewSong) {
+                        setCurrentSong(data);
+                        currentSongRef.current = data;
+                    }
+                    
+                    // Schedule next poll based on remaining track time
+                    const nextPollTime = calculateNextPollTime(data);
+                    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+                    timeoutRef.current = setTimeout(fetchCurrentSong, nextPollTime);
+                } else {
+                    setCurrentSong(null);
+                    currentSongRef.current = null;
+                }
+            } else {
                 setCurrentSong(null);
                 currentSongRef.current = null;
-                return;
-            }
-
-            if (data?.item?.id && (!currentSongRef.current || currentSongRef.current.item.id !== data.item.id)) {
-                setCurrentSong(data);
-                currentSongRef.current = data;
             }
         } catch (error) {
             console.error('Error fetching Spotify data:', error);
@@ -97,106 +81,14 @@ export const SpotifyWrapper = () => {
         }
     }, []);
 
-    // Initialize Spotify Web Playback SDK
     useEffect(() => {
-        const script = document.createElement('script');
-        script.src = 'https://sdk.scdn.co/spotify-player.js';
-        script.async = true;
-
-        document.body.appendChild(script);
-
-        window.onSpotifyWebPlaybackSDKReady = () => {
-            const player = new window.Spotify.Player({
-                name: 'Web Playback SDK Player',
-                getOAuthToken: async (cb) => {
-                    try {
-                        const token = await getAccessToken();
-                        accessTokenRef.current = token;
-                        cb(token);
-                    } catch (error) {
-                        console.error('Error getting token for SDK:', error);
-                    }
-                }
-            });
-
-            playerRef.current = player;
-
-            player.addListener('ready', ({ device_id }) => {
-                console.log('Ready with Device ID', device_id);
-                setSdkReady(true);
-            });
-
-            player.addListener('not_ready', ({ device_id }) => {
-                console.log('Device ID is not ready', device_id);
-            });
-
-            player.addListener('player_state_changed', (state) => {
-                if (!state) return;
-
-                const apiFormat = {
-                    is_playing: state.paused === false,
-                    progress_ms: state.position,
-                    item: {
-                        id: state.track_window.current_track.id,
-                        name: state.track_window.current_track.name,
-                        duration_ms: state.duration,
-                        album: {
-                            images: [{ url: state.track_window.current_track.album.images[0].url }],
-                            name: state.track_window.current_track.album.name
-                        },
-                        artists: [{ name: state.track_window.current_track.artists[0].name }]
-                    }
-                };
-
-                if (!currentSongRef.current || currentSongRef.current.item.id !== apiFormat.item.id) {
-                    setCurrentSong(apiFormat);
-                    currentSongRef.current = apiFormat;
-                }
-            });
-
-            player.addListener('initialization_error', ({ message }) => {
-                console.error('Failed to initialize:', message);
-            });
-
-            player.addListener('authentication_error', ({ message }) => {
-                console.error('Failed to authenticate:', message);
-                accessTokenRef.current = null; // Clear the token so we'll get a new one
-            });
-
-            player.addListener('account_error', ({ message }) => {
-                console.error('Failed to validate Spotify account:', message);
-            });
-
-            player.connect().then(success => {
-                if (success) {
-                    console.log('Successfully connected to Spotify');
-                }
-            });
-        };
-
-        return () => {
-            if (playerRef.current) {
-                playerRef.current.disconnect();
-            }
-            if (script.parentNode) {
-                script.parentNode.removeChild(script);
-            }
-        };
-    }, []);
-
-    // Fallback to REST API if SDK is not available
-    useEffect(() => {
-        if (!sdkReady) {
-            fetchCurrentSong();
-            timeoutRef.current = setInterval(fetchCurrentSong, 30000);
-        }
-
+        fetchCurrentSong();
         return () => {
             if (timeoutRef.current) {
-                clearInterval(timeoutRef.current);
+                clearTimeout(timeoutRef.current);
             }
         };
-    }, [fetchCurrentSong, sdkReady]);
+    }, [fetchCurrentSong]);
 
     if (isLoading) {
         return <div>Loading...</div>;
