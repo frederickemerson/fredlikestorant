@@ -91,10 +91,10 @@ export const SpotifyWrapper = () => {
     }, [fetchCurrentSong]);
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return  <NoSong />;
     }
 
-    if (!currentSong || !currentSong.item) {
+    if (!currentSong) {
         return <NoSong />;
     }
 
