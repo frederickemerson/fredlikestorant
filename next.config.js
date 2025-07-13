@@ -22,7 +22,7 @@ const config = {
         remotePatterns: [
         {
             protocol: 'https',
-            hostname: 'eeaijeuvjuhxcftixigx.supabase.co',
+            hostname: 'pub-dd12bbb048d54542b98dd995fa1420ef.r2.dev',
           },
         ],   
     }
