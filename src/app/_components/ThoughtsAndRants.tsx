@@ -11,7 +11,6 @@ const ThoughtsAndRants = ({scrollYProgress}) => {
   
   return (
     <motion.div style={{opacity}} className="relative h-auto">
-      <Thoughts /> 
       <BlogPosts />    
     </motion.div>
   )
